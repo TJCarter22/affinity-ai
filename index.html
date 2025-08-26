@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Affinity AI</title>
+    <title>Affinity AI - UX Research Tool</title>
     <style>
         * {
             margin: 0;
@@ -15,9 +15,6 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             padding: 20px;
         }
         
@@ -25,22 +22,27 @@
             background: white;
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            padding: 60px 40px;
-            text-align: center;
-            max-width: 600px;
+            padding: 40px;
+            max-width: 1200px;
             width: 100%;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
         }
         
         .logo {
-            font-size: 4rem;
-            margin-bottom: 20px;
+            font-size: 3rem;
+            margin-bottom: 10px;
         }
         
         h1 {
-            font-size: 3rem;
+            font-size: 2.5rem;
             font-weight: 700;
             color: #2d3748;
-            margin-bottom: 16px;
+            margin-bottom: 10px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -48,29 +50,100 @@
         }
         
         .subtitle {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: #718096;
-            margin-bottom: 40px;
-            line-height: 1.6;
+            margin-bottom: 30px;
         }
         
-        .message {
-            font-size: 1.1rem;
-            color: #4a5568;
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
             margin-bottom: 30px;
-            padding: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            overflow-x: auto;
+        }
+        
+        .nav-tab {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            font-weight: 600;
+            color: #718096;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .nav-tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .nav-tab:hover:not(.active) {
+            background: #f7fafc;
+            color: #4a5568;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .input-section {
             background: #f7fafc;
             border-radius: 12px;
-            border-left: 4px solid #667eea;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+        
+        textarea, input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+            font-family: inherit;
+        }
+        
+        textarea:focus, input[type="file"]:focus {
+            outline: none;
+            border-color: #667eea;
         }
         
         .button {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            padding: 16px 32px;
-            border-radius: 50px;
-            font-size: 1.1rem;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -82,102 +155,621 @@
             box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
         }
         
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
-            margin-top: 40px;
+        .button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
         
-        .feature {
+        .notes-preview {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
             padding: 20px;
-            background: #f7fafc;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
         }
         
-        .feature-icon {
+        .note-item {
+            background: #f7fafc;
+            border-left: 4px solid #667eea;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .note-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .cluster {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .cluster-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .cluster-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+        
+        .cluster-count {
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .insight-list {
+            list-style: none;
+            margin-bottom: 15px;
+        }
+        
+        .insight-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #e2e8f0;
+            color: #4a5568;
+        }
+        
+        .insight-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .insight-list li::before {
+            content: "💡";
+            margin-right: 8px;
+        }
+        
+        .export-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .export-card {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .export-card:hover {
+            border-color: #667eea;
+            background: white;
+            transform: translateY(-2px);
+        }
+        
+        .export-icon {
             font-size: 2rem;
             margin-bottom: 10px;
         }
         
-        .feature-text {
+        .export-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+        
+        .export-desc {
             font-size: 0.9rem;
-            color: #4a5568;
-            font-weight: 500;
+            color: #718096;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #718096;
+        }
+        
+        .loading::after {
+            content: "";
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #e2e8f0;
+            border-radius: 50%;
+            border-top-color: #667eea;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
         
         @media (max-width: 768px) {
             .container {
-                padding: 40px 20px;
+                padding: 20px;
+            }
+            
+            .nav-tabs {
+                flex-wrap: wrap;
             }
             
             h1 {
-                font-size: 2.5rem;
-            }
-            
-            .features {
-                grid-template-columns: 1fr;
+                font-size: 2rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="logo">🚀</div>
-        <h1>Affinity AI</h1>
-        <p class="subtitle">AI-powered UX research affinitization and insight extraction tool</p>
-        
-        <div class="message" id="message">
-            Welcome to the future of UX research! 🎉<br>
-            Your tool is ready to help you analyze user feedback and extract actionable insights.
+        <div class="header">
+            <div class="logo">🚀</div>
+            <h1>Affinity AI</h1>
+            <p class="subtitle">AI-powered UX research affinitization and insight extraction tool</p>
         </div>
         
-        <button class="button" onclick="changeMessage()">
-            Get Started
-        </button>
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('input')">📝 Input Notes</button>
+            <button class="nav-tab" onclick="showTab('analyze')">🤖 Analyze</button>
+            <button class="nav-tab" onclick="showTab('insights')">💡 Insights</button>
+            <button class="nav-tab" onclick="showTab('export')">📊 Export</button>
+        </div>
         
-        <div class="features">
-            <div class="feature">
-                <div class="feature-icon">📝</div>
-                <div class="feature-text">Smart Note Processing</div>
+        <!-- Input Tab -->
+        <div id="input" class="tab-content active">
+            <div class="input-section">
+                <h2>Add Your Research Notes</h2>
+                <p style="color: #718096; margin-bottom: 20px;">Paste your user feedback, upload files, or add notes manually.</p>
+                
+                <div class="input-group">
+                    <label for="notes-text">Paste Notes (one per line or separated by paragraphs):</label>
+                    <textarea id="notes-text" placeholder="Example:
+• Users love the search feature but find it hard to locate
+• Navigation menu is confusing, especially on mobile
+• The checkout process takes too many steps
+• Color scheme is appealing and professional
+• Loading times are frustratingly slow"></textarea>
+                </div>
+                
+                <div class="input-group">
+                    <label for="file-upload">Or upload a text file:</label>
+                    <input type="file" id="file-upload" accept=".txt,.csv" onchange="handleFileUpload(event)">
+                </div>
+                
+                <button class="button" onclick="processNotes()">Process Notes</button>
+                
+                <div id="notes-preview" class="notes-preview" style="display: none;">
+                    <h3>Processed Notes:</h3>
+                    <div id="notes-list"></div>
+                </div>
             </div>
-            <div class="feature">
-                <div class="feature-icon">🤖</div>
-                <div class="feature-text">AI-Powered Clustering</div>
+        </div>
+        
+        <!-- Analyze Tab -->
+        <div id="analyze" class="tab-content">
+            <div class="input-section">
+                <h2>AI Analysis</h2>
+                <p style="color: #718096; margin-bottom: 20px;">Our AI will group similar notes and identify patterns.</p>
+                
+                <div id="analyze-content">
+                    <p>Add some notes first to enable analysis.</p>
+                </div>
             </div>
-            <div class="feature">
-                <div class="feature-icon">💡</div>
-                <div class="feature-text">Actionable Insights</div>
+        </div>
+        
+        <!-- Insights Tab -->
+        <div id="insights" class="tab-content">
+            <div class="input-section">
+                <h2>Generated Insights</h2>
+                <p style="color: #718096; margin-bottom: 20px;">Actionable insights and design recommendations based on your research.</p>
+                
+                <div id="insights-content">
+                    <p>Complete the analysis step to see insights.</p>
+                </div>
             </div>
-            <div class="feature">
-                <div class="feature-icon">📊</div>
-                <div class="feature-text">Multiple Export Formats</div>
+        </div>
+        
+        <!-- Export Tab -->
+        <div id="export" class="tab-content">
+            <div class="input-section">
+                <h2>Export Your Results</h2>
+                <p style="color: #718096; margin-bottom: 20px;">Download your insights in various formats for sharing with your team.</p>
+                
+                <div class="export-options">
+                    <div class="export-card" onclick="exportFormat('markdown')">
+                        <div class="export-icon">📝</div>
+                        <div class="export-title">Markdown</div>
+                        <div class="export-desc">Perfect for documentation</div>
+                    </div>
+                    
+                    <div class="export-card" onclick="exportFormat('csv')">
+                        <div class="export-icon">📊</div>
+                        <div class="export-title">CSV</div>
+                        <div class="export-desc">For spreadsheet analysis</div>
+                    </div>
+                    
+                    <div class="export-card" onclick="exportFormat('miro')">
+                        <div class="export-icon">🎨</div>
+                        <div class="export-title">Miro-Ready</div>
+                        <div class="export-desc">Paste directly to Miro</div>
+                    </div>
+                    
+                    <div class="export-card" onclick="exportFormat('json')">
+                        <div class="export-icon">⚙️</div>
+                        <div class="export-title">JSON</div>
+                        <div class="export-desc">For developers</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     
     <script>
-        const messages = [
-            "🎯 Ready to transform your research process!",
-            "✨ Upload notes, get insights, make better design decisions!",
-            "🚀 From messy feedback to clear action items in minutes!",
-            "💪 Built for UX researchers who deserve better tools!",
-            "🎉 Welcome to smarter research analysis!"
-        ];
+        let processedNotes = [];
+        let clusters = [];
+        let insights = [];
         
-        let messageIndex = 0;
-        
-        function changeMessage() {
-            const messageEl = document.getElementById('message');
-            messageIndex = (messageIndex + 1) % messages.length;
-            messageEl.innerHTML = messages[messageIndex];
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
             
-            // Add a little animation
-            messageEl.style.transform = 'scale(0.95)';
+            // Remove active class from all nav tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked nav tab
+            event.target.classList.add('active');
+        }
+        
+        function processNotes() {
+            const notesText = document.getElementById('notes-text').value.trim();
+            
+            if (!notesText) {
+                alert('Please add some notes first!');
+                return;
+            }
+            
+            // Split notes by lines or paragraphs
+            const rawNotes = notesText.split(/\n+/).filter(note => note.trim().length > 0);
+            
+            // Clean and process notes
+            processedNotes = rawNotes.map((note, index) => ({
+                id: index + 1,
+                text: note.trim().replace(/^[•\-\*]\s*/, ''), // Remove bullet points
+                original: note.trim()
+            }));
+            
+            displayProcessedNotes();
+            updateAnalyzeTab();
+        }
+        
+        function displayProcessedNotes() {
+            const preview = document.getElementById('notes-preview');
+            const notesList = document.getElementById('notes-list');
+            
+            notesList.innerHTML = processedNotes.map(note => 
+                `<div class="note-item">
+                    <strong>Note ${note.id}:</strong> ${note.text}
+                </div>`
+            ).join('');
+            
+            preview.style.display = 'block';
+        }
+        
+        function updateAnalyzeTab() {
+            const analyzeContent = document.getElementById('analyze-content');
+            
+            if (processedNotes.length === 0) {
+                analyzeContent.innerHTML = '<p>Add some notes first to enable analysis.</p>';
+                return;
+            }
+            
+            analyzeContent.innerHTML = `
+                <p>Ready to analyze ${processedNotes.length} notes!</p>
+                <button class="button" onclick="runAnalysis()">🤖 Run AI Analysis</button>
+            `;
+        }
+        
+        function runAnalysis() {
+            const analyzeContent = document.getElementById('analyze-content');
+            analyzeContent.innerHTML = '<div class="loading">Analyzing your notes with AI...</div>';
+            
+            // Simulate AI analysis
             setTimeout(() => {
-                messageEl.style.transform = 'scale(1)';
-            }, 150);
+                generateMockClusters();
+                displayClusters();
+                generateInsights();
+            }, 3000);
+        }
+        
+        function generateMockClusters() {
+            // Simple clustering simulation based on keywords
+            const themes = [
+                { name: 'Navigation & Usability', keywords: ['navigation', 'menu', 'find', 'locate', 'confusing', 'hard'] },
+                { name: 'Performance & Speed', keywords: ['slow', 'loading', 'fast', 'performance', 'speed', 'time'] },
+                { name: 'Visual Design', keywords: ['color', 'design', 'visual', 'appealing', 'professional', 'look'] },
+                { name: 'User Flow & Process', keywords: ['process', 'steps', 'checkout', 'flow', 'journey', 'workflow'] },
+                { name: 'Features & Functionality', keywords: ['feature', 'search', 'function', 'tool', 'capability'] }
+            ];
+            
+            clusters = themes.map((theme, index) => {
+                const matchingNotes = processedNotes.filter(note => 
+                    theme.keywords.some(keyword => 
+                        note.text.toLowerCase().includes(keyword)
+                    )
+                );
+                
+                if (matchingNotes.length > 0) {
+                    return {
+                        id: index + 1,
+                        name: theme.name,
+                        notes: matchingNotes,
+                        insights: generateClusterInsights(theme.name, matchingNotes)
+                    };
+                }
+                return null;
+            }).filter(cluster => cluster !== null);
+            
+            // Add remaining notes to a "General Feedback" cluster
+            const usedNoteIds = clusters.flatMap(c => c.notes.map(n => n.id));
+            const remainingNotes = processedNotes.filter(note => !usedNoteIds.includes(note.id));
+            
+            if (remainingNotes.length > 0) {
+                clusters.push({
+                    id: clusters.length + 1,
+                    name: 'General Feedback',
+                    notes: remainingNotes,
+                    insights: generateClusterInsights('General Feedback', remainingNotes)
+                });
+            }
+        }
+        
+        function generateClusterInsights(themeName, notes) {
+            const templates = {
+                'Navigation & Usability': [
+                    'Users struggle with finding key features and navigation elements',
+                    'Information architecture needs improvement for better discoverability',
+                    'Consider implementing breadcrumbs and clearer navigation labels'
+                ],
+                'Performance & Speed': [
+                    'Loading times significantly impact user satisfaction',
+                    'Performance optimization should be a high priority',
+                    'Consider implementing loading indicators and progressive loading'
+                ],
+                'Visual Design': [
+                    'Visual design elements are generally well-received',
+                    'Color scheme and aesthetics contribute positively to user experience',
+                    'Maintain design consistency while improving functionality'
+                ],
+                'User Flow & Process': [
+                    'Current user flows have unnecessary complexity',
+                    'Streamlining processes could improve conversion rates',
+                    'Consider implementing progressive disclosure and step indicators'
+                ],
+                'Features & Functionality': [
+                    'Core features are valuable but need better discoverability',
+                    'Feature placement and prominence need optimization',
+                    'Consider user onboarding to highlight key capabilities'
+                ]
+            };
+            
+            return templates[themeName] || [
+                'This feedback provides valuable insights into user needs',
+                'Consider prioritizing these items in your product roadmap',
+                'Further research may be needed to validate these findings'
+            ];
+        }
+        
+        function displayClusters() {
+            const analyzeContent = document.getElementById('analyze-content');
+            
+            const clustersHtml = clusters.map(cluster => `
+                <div class="cluster">
+                    <div class="cluster-header">
+                        <div class="cluster-title">${cluster.name}</div>
+                        <div class="cluster-count">${cluster.notes.length} notes</div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <strong>Notes in this cluster:</strong>
+                        ${cluster.notes.map(note => `<div style="margin: 5px 0; padding: 8px; background: #f7fafc; border-radius: 4px;">• ${note.text}</div>`).join('')}
+                    </div>
+                    <div>
+                        <strong>Key Insights:</strong>
+                        <ul class="insight-list">
+                            ${cluster.insights.map(insight => `<li>${insight}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+            `).join('');
+            
+            analyzeContent.innerHTML = `
+                <h3>Analysis Complete! 🎉</h3>
+                <p style="margin-bottom: 20px;">Found ${clusters.length} themes in your research:</p>
+                ${clustersHtml}
+                <button class="button" onclick="showTab('insights')" style="margin-top: 20px;">View Detailed Insights →</button>
+            `;
+        }
+        
+        function generateInsights() {
+            insights = clusters.flatMap(cluster => 
+                cluster.insights.map(insight => ({
+                    theme: cluster.name,
+                    insight: insight,
+                    evidence: cluster.notes.slice(0, 3), // Top 3 notes as evidence
+                    priority: cluster.notes.length >= 3 ? 'High' : cluster.notes.length >= 2 ? 'Medium' : 'Low'
+                }))
+            );
+            
+            updateInsightsTab();
+        }
+        
+        function updateInsightsTab() {
+            const insightsContent = document.getElementById('insights-content');
+            
+            if (insights.length === 0) {
+                insightsContent.innerHTML = '<p>Complete the analysis step to see insights.</p>';
+                return;
+            }
+            
+            const insightsHtml = insights.map((item, index) => `
+                <div class="cluster">
+                    <div class="cluster-header">
+                        <div class="cluster-title">${item.theme}</div>
+                        <div class="cluster-count" style="background: ${item.priority === 'High' ? '#e53e3e' : item.priority === 'Medium' ? '#dd6b20' : '#38a169'}">${item.priority} Priority</div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <strong>💡 Insight:</strong>
+                        <p style="margin: 10px 0; font-style: italic;">${item.insight}</p>
+                    </div>
+                    <div>
+                        <strong>📋 Supporting Evidence:</strong>
+                        ${item.evidence.map(note => `<div style="margin: 5px 0; padding: 8px; background: #f7fafc; border-radius: 4px; border-left: 3px solid #667eea;">• ${note.text}</div>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+            
+            insightsContent.innerHTML = `
+                <h3>Research Insights Summary 📊</h3>
+                <p style="margin-bottom: 20px;">Generated ${insights.length} actionable insights from your research:</p>
+                ${insightsHtml}
+            `;
+        }
+        
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('notes-text').value = e.target.result;
+            };
+            reader.readAsText(file);
+        }
+        
+        function exportFormat(format) {
+            if (insights.length === 0) {
+                alert('Please complete the analysis first!');
+                return;
+            }
+            
+            let content = '';
+            let filename = '';
+            let mimeType = '';
+            
+            switch(format) {
+                case 'markdown':
+                    content = generateMarkdown();
+                    filename = 'affinity-insights.md';
+                    mimeType = 'text/markdown';
+                    break;
+                case 'csv':
+                    content = generateCSV();
+                    filename = 'affinity-insights.csv';
+                    mimeType = 'text/csv';
+                    break;
+                case 'miro':
+                    content = generateMiroFormat();
+                    filename = 'miro-ready-insights.txt';
+                    mimeType = 'text/plain';
+                    break;
+                case 'json':
+                    content = generateJSON();
+                    filename = 'affinity-insights.json';
+                    mimeType = 'application/json';
+                    break;
+            }
+            
+            downloadFile(content, filename, mimeType);
+        }
+        
+        function generateMarkdown() {
+            let md = '# UX Research Insights\n\n';
+            md += `Generated on: ${new Date().toLocaleDateString()}\n\n`;
+            
+            clusters.forEach(cluster => {
+                md += `## ${cluster.name}\n\n`;
+                md += `**Notes analyzed:** ${cluster.notes.length}\n\n`;
+                md += '### Key Insights\n\n';
+                cluster.insights.forEach(insight => {
+                    md += `- ${insight}\n`;
+                });
+                md += '\n### Supporting Evidence\n\n';
+                cluster.notes.forEach(note => {
+                    md += `- "${note.text}"\n`;
+                });
+                md += '\n---\n\n';
+            });
+            
+            return md;
+        }
+        
+        function generateCSV() {
+            let csv = 'Theme,Insight,Priority,Evidence\n';
+            insights.forEach(item => {
+                const evidence = item.evidence.map(e => e.text).join('; ');
+                csv += `"${item.theme}","${item.insight}","${item.priority}","${evidence}"\n`;
+            });
+            return csv;
+        }
+        
+        function generateMiroFormat() {
+            let miro = 'AFFINITY AI - RESEARCH INSIGHTS\n';
+            miro += '================================\n\n';
+            
+            clusters.forEach(cluster => {
+                miro += `🎯 ${cluster.name.toUpperCase()}\n`;
+                miro += `📊 ${cluster.notes.length} user mentions\n\n`;
+                miro += '💡 KEY INSIGHTS:\n';
+                cluster.insights.forEach(insight => {
+                    miro += `• ${insight}\n`;
+                });
+                miro += '\n📋 EVIDENCE:\n';
+                cluster.notes.forEach(note => {
+                    miro += `• "${note.text}"\n`;
+                });
+                miro += '\n' + '='.repeat(50) + '\n\n';
+            });
+            
+            return miro;
+        }
+        
+        function generateJSON() {
+            const data = {
+                generatedAt: new Date().toISOString(),
+                totalNotes: processedNotes.length,
+                totalClusters: clusters.length,
+                totalInsights: insights.length,
+                clusters: clusters,
+                insights: insights
+            };
+            return JSON.stringify(data, null, 2);
+        }
+        
+        function downloadFile(content, filename, mimeType) {
+            const blob = new Blob([content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
     </script>
 </body>
