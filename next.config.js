@@ -4,9 +4,7 @@ const nextConfig = {
   trailingSlash: true,
   images: {
     unoptimized: true
-  },
-  basePath: '/affinity-ai',
-  assetPrefix: '/affinity-ai/'
+  }
 }
 
 module.exports = nextConfig
