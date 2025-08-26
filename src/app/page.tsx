@@ -1,24 +1,75 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 
 export default function Home() {
   const [message, setMessage] = useState('Welcome to Affinity AI! 🎉');
 
+  const styles = {
+    container: {
+      minHeight: '100vh',
+      backgroundColor: '#f9fafb',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      fontFamily: 'system-ui, -apple-system, sans-serif'
+    },
+    content: {
+      maxWidth: '800px',
+      margin: '0 auto',
+      padding: '20px',
+      textAlign: 'center' as const
+    },
+    title: {
+      fontSize: '3rem',
+      fontWeight: 'bold',
+      color: '#111827',
+      marginBottom: '16px'
+    },
+    subtitle: {
+      fontSize: '1.25rem',
+      color: '#6b7280',
+      marginBottom: '32px'
+    },
+    card: {
+      backgroundColor: 'white',
+      borderRadius: '12px',
+      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+      padding: '32px'
+    },
+    message: {
+      fontSize: '1.125rem',
+      color: '#374151',
+      marginBottom: '16px'
+    },
+    button: {
+      padding: '12px 24px',
+      backgroundColor: '#2563eb',
+      color: 'white',
+      border: 'none',
+      borderRadius: '8px',
+      fontSize: '16px',
+      cursor: 'pointer',
+      transition: 'background-color 0.2s'
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="max-w-4xl mx-auto px-4 text-center">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
+    <div style={styles.container}>
+      <div style={styles.content}>
+        <h1 style={styles.title}>
           Affinity AI
         </h1>
-        <p className="text-xl text-gray-600 mb-8">
+        <p style={styles.subtitle}>
           AI-powered UX research affinitization and insight extraction tool
         </p>
-        <div className="bg-white rounded-lg shadow-lg p-8">
-          <p className="text-lg text-gray-800">{message}</p>
+        <div style={styles.card}>
+          <p style={styles.message}>{message}</p>
           <button
+            style={styles.button}
             onClick={() => setMessage('🚀 Ready to analyze some notes!')}
-            className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#1d4ed8'}
+            onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#2563eb'}
           >
             Click me!
           </button>
