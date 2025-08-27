@@ -1,6 +1,6 @@
 # Affinity AI 🚀
 
-AI-powered UX research affinitization and insight extraction tool that helps researchers move beyond "dumping notes into ChatGPT" to get structured, actionable design insights.
+AI-powered UX research affinitization and insight extraction tool that helps researchers to get structured, actionable design insights.
 
 ## What does this do? 🤔
 
@@ -13,7 +13,7 @@ This tool helps UX researchers:
 ## How to use it 📖
 
 1. **Upload your notes** - Paste text, upload files, or import CSV
-2. **Let AI work its magic** - Automatic clustering and analysis
+2. **Let AI do its stuff** - Automatic clustering and analysis
 3. **Get insights** - Clear, actionable design recommendations
 4. **Export results** - Share with your team in multiple formats
 
@@ -27,7 +27,7 @@ This is built with:
 
 ## Status 📈
 
-🚧 **Work in Progress** - Adding more features every day!
+🚧 **Work in Progress** - Planning on Adding more features soon!
 
 ## License 📄
 
